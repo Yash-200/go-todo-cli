@@ -12,9 +12,9 @@ import (
 )
 
 func ListTasksHandler(w http.ResponseWriter, r *http.Request) {
-	// Get query parameters from the URL
+
 	filterName := r.URL.Query().Get("filter_name")
-	filterStatus := r.URL.Query().Get("status") // Get the new status parameter
+	filterStatus := r.URL.Query().Get("status")
 	sortBy := r.URL.Query().Get("sort_by")
 	order := r.URL.Query().Get("order")
 
@@ -22,7 +22,6 @@ func ListTasksHandler(w http.ResponseWriter, r *http.Request) {
 		order = "asc"
 	}
 
-	// Use the updated function with the new parameter
 	tasks, err := database.GetTasks(filterName, filterStatus, sortBy, order)
 	if err != nil {
 		log.Printf("Error getting tasks: %v", err)
@@ -36,7 +35,7 @@ func ListTasksHandler(w http.ResponseWriter, r *http.Request) {
 
 func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	var task models.Task
-	// Decode the incoming JSON request body into the task struct
+
 	if err := json.NewDecoder(r.Body).Decode(&task); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return

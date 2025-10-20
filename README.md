@@ -44,7 +44,7 @@ This project was built with Go version `go1.24.9 linux/amd64`.
 
 ## CLI Usage
 
-All commands are run from the executable (`./go-todo-cli`).
+All commands are run from the executable (`./go-todo-cli`) and for help use `./go-todo-cli help`.
 
 #### `add`
 Adds a new task. The task name must be enclosed in quotes if it contains spaces.

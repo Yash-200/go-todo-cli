@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/Yash-200/go-todo-cli/internal/models" // Import the new models package
+	"github.com/Yash-200/go-todo-cli/internal/models"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -14,13 +14,12 @@ var DB *sql.DB
 
 func InitDB() {
 	var err error
-	// Open a connection to the SQLite database. The file will be created if it doesn't exist.
+
 	DB, err = sql.Open("sqlite3", "./tasks.db")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Ping the database to ensure the connection is alive.
 	if err = DB.Ping(); err != nil {
 		log.Fatal(err)
 	}
@@ -40,7 +39,6 @@ func InitDB() {
 	statement.Exec()
 }
 
-// GetTasks retrieves tasks from the database with optional filtering and sorting
 func GetTasks(filterName, filterStatus, sortBy, order string) ([]models.Task, error) {
 	query := "SELECT id, name, status, created_at FROM tasks"
 	var queryArgs []interface{}
@@ -81,7 +79,7 @@ func GetTasks(filterName, filterStatus, sortBy, order string) ([]models.Task, er
 	var tasks []models.Task
 	for rows.Next() {
 		var task models.Task
-		// The fix is here: Scan directly into the time.Time field.
+
 		if err := rows.Scan(&task.ID, &task.Name, &task.Status, &task.CreatedAt); err != nil {
 			return nil, fmt.Errorf("failed to scan row: %w", err)
 		}
@@ -108,7 +106,7 @@ func CreateTask(name string) (*models.Task, error) {
 	}
 
 	var task models.Task
-	// The fix is here: Scan directly into the time.Time field.
+
 	err = DB.QueryRow("SELECT id, name, status, created_at FROM tasks WHERE id = ?", id).Scan(&task.ID, &task.Name, &task.Status, &task.CreatedAt)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch new task: %w", err)
